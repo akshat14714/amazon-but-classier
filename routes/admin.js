@@ -15,7 +15,7 @@ const adminBro = new AdminBro({
   databases: [mongoose],
   rootPath: "/admin",
   branding: {
-    companyName: "BestBags",
+    companyName: "AmazonButClassier",
     logo: "/images/shop-icon.png",
     softwareBrothers: false,
   },
@@ -162,10 +162,14 @@ const adminBro = new AdminBro({
   },
 });
 
+// const ADMIN = {
+//   email: process.env.ADMIN_EMAIL,
+//   password: process.env.ADMIN_PASSWORD,
+// };
 const ADMIN = {
-  email: process.env.ADMIN_EMAIL,
-  password: process.env.ADMIN_PASSWORD,
-};
+  email: "admin@example.com",
+  password: "admin123"
+}
 
 const router = AdminBroExpress.buildAuthenticatedRouter(adminBro, {
   authenticate: async (email, password) => {
@@ -174,8 +178,10 @@ const router = AdminBroExpress.buildAuthenticatedRouter(adminBro, {
     }
     return null;
   },
-  cookieName: process.env.ADMIN_COOKIE_NAME,
-  cookiePassword: process.env.ADMIN_COOKIE_PASSWORD,
+  cookieName: "adminCookie",
+  cookiePassword: "adminCookiePassword"
+  // cookieName: process.env.ADMIN_COOKIE_NAME,
+  // cookiePassword: process.env.ADMIN_COOKIE_PASSWORD,
 });
 
 module.exports = router;

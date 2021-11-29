@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-md navbar-custom navbar-dark">
-  <button
+  <!-- <button
     class="navbar-toggler"
     type="button"
     data-toggle="collapse"
@@ -9,8 +9,8 @@
     aria-label="Toggle navigation"
   >
     <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse mx-auto order-0" id="navbarNav">
+  </button> -->
+  <!-- <div class="collapse navbar-collapse mx-auto order-0" id="navbarNav">
     <ul class="navbar-nav mx-auto">
       <li <% if (pageName === "All Products") { %>
         class="nav-item active"
@@ -34,5 +34,19 @@
           <% }) %>
       <% } %>
     </ul>
-  </div>
+  </div> -->
+
+  <form action="/product/products" class="form-group" method="GET">
+    <input name="search" type="text" placeholder="Search Text..." />
+    <label for="productGenders">Choose a gender:</label>
+
+    <select name="gender" class="form-group" id="productGenders">
+      <option value="all">All</option>
+      <option value="men">Men</option>
+      <option value="women">Women</option>
+    </select>
+
+    <button type="submit" class="btn btn-success">Search</button>
+  </form>
+
 </nav>
