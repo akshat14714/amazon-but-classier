@@ -23,7 +23,7 @@
               <a
               href="/products/<%=product.category.slug%>/<%=product._id%>"
             >
-              <img src="<%=product.imagePath%>" class="img-small image-fluid" alt="image thumbnail" />
+              <img src="<%=product.imagePath%>" class="img-small img-fluid" alt="image thumbnail" />
               </a>
             </td>
             <td>
@@ -38,13 +38,13 @@
               </a>
             </td>
             <td class="text-center">
-              <a href="/add-to-cart/<%=product._id%>"
-                ><i class="fa fa-plus-square" aria-hidden="true"></i
-              > </a>
+              <a href="/add-to-cart/<%=product._id%>" role="button">
+                <i class="fa fa-plus-square" aria-hidden="true"></i> 
+              </a>
             </td>
             <td class="text-center">
               <p class="qty-display pt-1">
-              <%= product.qty %>
+              <%= product.quantity %>
             </p>
           </td>
             <td class="text-center" >
@@ -55,11 +55,8 @@
             <td>$<%= product.price %></td>
             <td>$<%= product.totalPrice %></td>
             <td>
-              <a
-                href="/removeAll/<%=product._id%>"
-                class="btn btn-danger btn-sm button-style-danger"
-                >Remove all</a
-              >
+              <a href="/removeAll/<%=product._id%>"
+                class="btn btn-danger btn-sm button-style-danger">Remove all</a>
             </td>
           </tr>
           <% } %> <% }) %>
@@ -81,7 +78,7 @@
   <% } else { %>
   <div class="row text-center">
     <div class="col-md-9 col-sm-9 m-auto">
-      <h2>No items in the cart</h2>
+      <h2>Oops, Your cart is empty!</h2>
     </div>
   </div>
 

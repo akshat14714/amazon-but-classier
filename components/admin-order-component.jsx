@@ -114,7 +114,7 @@ const AdminShowOrder = (props) => {
           {TitlesData}
         </Col>
         <Col>
-          <h3>Quantity</h3>
+          <h3>qty</h3>
           {QtysData}
         </Col>
         <Col>
@@ -123,7 +123,7 @@ const AdminShowOrder = (props) => {
         </Col>
       </Container>
       <ContainerBottom>
-        <h4>Total Number of Items: {polCarts["cart.totalQty"]} </h4>
+        <h4>Total Number of Items: {polCarts["cart.totalqty"]} </h4>
         <h4>Total Cost: {polCarts["cart.totalCost"]} </h4>
       </ContainerBottom>
     </div>

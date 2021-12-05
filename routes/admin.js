@@ -106,7 +106,7 @@ const adminBro = new AdminBro({
               edit: false,
             },
           },
-          "cart.totalQty": {
+          "cart.totalqty": {
             isVisible: {
               list: false,
               filter: false,
