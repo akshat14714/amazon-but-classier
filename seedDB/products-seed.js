@@ -62,12 +62,13 @@ async function seedDB() {
   ];
 
 
-  async function seedProducts(titlesArr, imgsArr, categStr) {
+  async function seedProducts(titlesArr, imgsArr, categStr, genderStr) {
     try {
       const categ = await Category.findOne({ title: categStr });
       for (let i = 0; i < titlesArr.length; i++) {
+        var prodCode = Math.random().toString(36).slice(2);
         let prod = new Product({
-          productCode: faker.helpers.replaceSymbolWithNumber("####-##########"),
+          // productCode: faker.helpers.replaceSymbolWithNumber("####-##########"),
           title: titlesArr[i],
           imagePath: imgsArr[i],
           description: faker.lorem.paragraph(),
@@ -75,6 +76,8 @@ async function seedDB() {
           manufacturer: faker.company.companyName(0),
           available: true,
           category: categ._id,
+          gender: genderStr,
+          productCode: prodCode
         });
         await prod.save();
       }
@@ -89,8 +92,8 @@ async function seedDB() {
     await mongoose.disconnect();
   }
 
-  await seedProducts(men_titles, men_imgs, "Men");
-  await seedProducts(women_titles, women_imgs, "Women");
+  await seedProducts(men_titles, men_imgs, "Men", "Men");
+  await seedProducts(women_titles, women_imgs, "Women", "Women");
 
 
   await closeDB();

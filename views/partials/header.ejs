@@ -2,7 +2,7 @@
 <html>
   <head>
     <% if (pageName) { %>
-    <title> Vogue Dress Shop <%= pageName %></title>
+    <title> Amazon But Classier | <%= pageName %></title>
     <%} else {%>
     <title>Shopping Cart</title>
     <% } %>
@@ -32,7 +32,7 @@
 
       <div class="col-md-4 col-sm-12 col-xs-12 logo-container">
         <a href="/">
-          <h4 class="logo-title">Vogue</h4>
+          <h4 class="logo-title">AmazonButClassier</h4>
         </a>
       </div>
       <div class="col-md-4 col-sm-12 col-xs-12">
@@ -47,14 +47,16 @@
           </form>
         </div>
       </div>
+
       <div class="col-md-4 col-sm-12 col-xs-12 right-nav">
         <ul>
           <li>
             <a href="/shopping-cart">
-              <i class="fas fa-shopping-cart"></i> <% if(session.cart) { %>
-              <span class="badge badge-pill badge-info"
-                ><%= session.cart.totalQty %></span
-              >
+              <i class="fas fa-shopping-cart"></i> 
+              <% if(session.cart) { %>
+              <span class="badge badge-pill badge-info">
+                <%= session.cart.totalQuantity %>
+              </span>
               <% } else { %>
               <span class="badge badge-pill badge-info">0</span>
               <% } %>
@@ -70,7 +72,7 @@
               aria-haspopup="true"
               aria-expanded="false"
             >
-              <i class="fas fa-user"></i> Welcome <%=currentUser.username%>
+              <i class="fas fa-user"></i> <%=currentUser.username%>
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
               <a class="dropdown-item" href="/user/profile">User Account</a>

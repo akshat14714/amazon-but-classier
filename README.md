@@ -120,7 +120,7 @@ All the models can be found in the models directory created using mongoose.
   ~ price (Number) <br>
   ~ title (String) <br>
   ~ productCode (Number) <br>
-- totalQty (Number)
+- totalqty (Number)
 - totalCost (Number)
 - user (ObjectId - a reference to the user schema)
 - createdAt
