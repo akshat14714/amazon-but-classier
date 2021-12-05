@@ -1,4 +1,4 @@
-<%- include ../partials/header %>  <%- include ../partials/categories-navbar %>
+<%- include ../partials/header %>  
 <div class="container">
   <!-- Flash messages -->
   <div class="row mt-3 mb-3">
@@ -24,28 +24,30 @@
   <!-- Product info -->
   <div class="row mt-4 mb-4">
     <div class="col-md-5 mt-2 mr-2 ml-auto">
-      <img
-        src="<%=product.imagePath%>"
-        class="img-fluid product-img"
-        alt="product image"
-      />
-    </div>
-    <div class="col-md-5 mt-2 mb-2 ml-2 mr-auto text-dark">
       <h2><%=product.title%></h2>
-      <hr />
-      <p class="price">USD $<%=product.price%></p>
-      <p class="lead"> Description: 
+      <p class="price" style="color: red;">USD $<%=product.price%></p>
+      <h5>Brand:<%=product.manufacturer%></h5>
+
+      <img src="<%=product.imagePath%>" class="img-fluid product-img" alt="product image"
+      />
+      
+    </div>
+    <div class="col-md-5 mt-2 mb-2 ml-2 mr-auto text-dark mt-5">
+      <p class="mt-5 lead"> Description: 
         <p><%=product.description%></p>
       </p>
+
       
-      <p><strong>Category:</strong> <%=product.category.title%></p>
-      <p><strong>Brand: </strong><%=product.manufacturer%></p>
-      <p><strong>Product code:</strong> <%=product.productCode%></p>
-      <p><strong>Date added to the store:</strong> <%= moment(product.createdAt).format( 'MMMM Do YYYY')%></p>
+      <!-- <p><strong>Category:</strong> <%=product.category.title%></p> -->
+      
+      <!-- <p><strong>Product code:</strong> <%=product.productCode%></p> -->
+      <!-- <p><strong>Date added to the store:</strong> <%= moment(product.createdAt).format( 'MMMM Do YYYY')%></p> -->
       <% if(product.available) {%>
-      <p class="is-available text-center">In stock</p>
-      <a href="/add-to-cart/<%=product._id%>" class="btn btn-block btn-secondary mt-3 mb-3 button-style">
-        Add to Shopping Cart
+      <p class="is-available text-center">Available</p>
+      <a href="/add-to-cart/<%=product._id%>" class="btn btn-danger mt-3 mb-3 ">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart-fill" viewBox="0 0 16 16">
+          <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+        </svg> &nbsp;Add to Cart
       </a>
       <% } else { %>
       <p class="is-not-available text-center">Sold out</p>

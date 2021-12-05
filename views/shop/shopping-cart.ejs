@@ -1,4 +1,4 @@
-<%- include ../partials/header %> <%- include ../partials/categories-navbar %>
+<%- include ../partials/header %>
 <div class="container cart">
   <% if (cart != null && !cart.paid ) { %>
   <div class="row">
@@ -6,7 +6,7 @@
       <table class="table text-center">
         <thead>
           <tr >
-            <th>Product</th>
+            <th>Products</th>
             <th>&nbsp;</th>
             <th>&nbsp;</th>
             <th>Quantity</th>
@@ -23,7 +23,7 @@
               <a
               href="/products/<%=product.category.slug%>/<%=product._id%>"
             >
-              <img src="<%=product.imagePath%>" class="img-small image-fluid" alt="image thumbnail" />
+              <img src="<%=product.imagePath%>" width="100px" height="100px" class="img-small image-fluid" alt="image thumbnail" />
               </a>
             </td>
             <td>
@@ -32,15 +32,15 @@
                 href="/products/<%=product.category.slug%>/<%=product._id%>"
               >
                 <h6 class="text-left"><%= product.title %></h6> 
-                <p class="text-left">Product No: <%= product.productCode %></p>
               </div>
               
               </a>
             </td>
             <td class="text-center">
-              <a href="/add-to-cart/<%=product._id%>"
-                ><i class="fa fa-plus-square" aria-hidden="true"></i
-              > </a>
+              <a href="/reduce/<%=product._id%>"
+                ><i class="fa fa-minus-square" aria-hidden="true"></i
+              ></a>
+
             </td>
             <td class="text-center">
               <p class="qty-display pt-1">
@@ -48,9 +48,9 @@
             </p>
           </td>
             <td class="text-center" >
-              <a href="/reduce/<%=product._id%>"
-                ><i class="fa fa-minus-square" aria-hidden="true"></i
-              ></a>
+              <a href="/add-to-cart/<%=product._id%>"
+                ><i class="fa fa-plus-square" aria-hidden="true"></i
+              > </a>
             </td>
             <td>$<%= product.price %></td>
             <td>$<%= product.totalPrice %></td>
@@ -75,7 +75,7 @@
   </div>
   <div class="row mt-2 mr-auto">
     <div class="col-md-11 col-sm-12 m-auto">
-      <a href="/checkout" class="btn btn-dark button-style">Checkout</a>
+      <a href="/checkout" class="btn btn-success">Checkout</a>
     </div>
   </div>
   <% } else { %>
