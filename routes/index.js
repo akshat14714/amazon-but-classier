@@ -49,23 +49,24 @@ router.get("/add-to-cart/:id", async (req, res) => {
 	const product = await Product.findById(productId);
 	const itemIndex = cart.items.findIndex((p) => p.productId == productId);
 	if (itemIndex > -1) {
-	  // if product exists in the cart, update the qty
-	  cart.items[itemIndex].qtyy++;
-	  cart.items[itemIndex].totalCost = cart.items[itemIndex].qty * product.price;
-	  cart.totalqty++;
-	  cart.totalCost += product.totalCost;
+	  // if product exists in the cart, update the quantity
+	  cart.items[itemIndex].quantity++;
+	  cart.items[itemIndex].totalCost = cart.items[itemIndex].quantity * product.price;
+	  cart.totalQuantity++;
+	  cart.totalCost += product.price;
+	  console.log("cart::: " + JSON.stringify(cart));
 	} else {
 	  // if product does not exists in cart, find it in the db to retrieve its price and add new item
 	  cart.items.push({
 		productId: productId,
 		productCode: product.productCode,
-		qty: 1,
+		quantity: 1,
 		price: product.price,
 		totalCost: product.price,
 		title: product.title,
 		productCode: product.productCode,
 	  });
-	  cart.totalqty++;
+	  cart.totalQuantity++;
 	  cart.totalCost += product.price;
 	}
 
@@ -138,13 +139,13 @@ router.get("/reduce/:id", async function (req, res, next) {
 	if (itemIndex > -1) {
 	  // find the product to find its price
 	  const product = await Product.findById(productId);
-	  // if product is found, reduce its qty
-	  cart.items[itemIndex].qty--;
-	  cart.items[itemIndex].price -= product.price;
-	  cart.totalqty--;
+	  // if product is found, reduce its quantity
+	  cart.items[itemIndex].quantity--;
+	  cart.items[itemIndex].totalCost -= product.price;
+	  cart.totalQuantity--;
 	  cart.totalCost -= product.price;
-	  // if the item's qty reaches 0, remove it from the cart
-	  if (cart.items[itemIndex].qty <= 0) {
+	  // if the item's quantity reaches 0, remove it from the cart
+	  if (cart.items[itemIndex].quantity <= 0) {
 		await cart.items.remove({ _id: cart.items[itemIndex]._id });
 	  }
 	  req.session.cart = cart;
@@ -152,8 +153,8 @@ router.get("/reduce/:id", async function (req, res, next) {
 	  if (req.user) {
 		await cart.save();
 	  }
-	  //delete cart if qty is 0
-	  if (cart.totalqty <= 0) {
+	  //delete cart if quantity is 0
+	  if (cart.totalQuantity <= 0) {
 		req.session.cart = null;
 		await Cart.findByIdAndRemove(cart._id);
 	  }
@@ -179,8 +180,8 @@ router.get("/removeAll/:id", async function (req, res, next) {
 	let itemIndex = cart.items.findIndex((p) => p.productId == productId);
 	if (itemIndex > -1) {
 	  //find the product to find its price
-	  cart.totalqty -= cart.items[itemIndex].qty;
-	  cart.totalCost -= cart.items[itemIndex].price;
+	  cart.totalQuantity -= cart.items[itemIndex].quantity;
+	  cart.totalCost -= cart.items[itemIndex].totalCost;
 	  await cart.items.remove({ _id: cart.items[itemIndex]._id });
 	}
 	req.session.cart = cart;
@@ -188,8 +189,8 @@ router.get("/removeAll/:id", async function (req, res, next) {
 	if (req.user) {
 	  await cart.save();
 	}
-	//delete cart if qty is 0
-	if (cart.totalqty <= 0) {
+	//delete cart if quantity is 0
+	if (cart.totalQuantity <= 0) {
 	  req.session.cart = null;
 	  await Cart.findByIdAndRemove(cart._id);
 	}
@@ -228,7 +229,7 @@ router.post("/checkout", middleware.isLoggedIn, async (req, res) => {
   const order = new Order({
 	user: req.user,
 	cart: {
-	  totalqty: cart.totalqty,
+	  totalQuantity: cart.totalQuantity,
 	  totalCost: cart.totalCost,
 	  items: cart.items,
 	},
@@ -262,7 +263,7 @@ router.post("/checkout", middleware.isLoggedIn, async (req, res) => {
   //     const order = new Order({
   //       user: req.user,
   //       cart: {
-  //         totalqty: cart.totalqty,
+  //         totalQuantity: cart.totalQuantity,
   //         totalCost: cart.totalCost,
   //         items: cart.items,
   //       },
@@ -292,7 +293,7 @@ async function productsFromCart(cart) {
 	  await Product.findById(item.productId).populate("category")
 	).toObject();
 	foundProduct["quantity"] = item.quantity;
-	foundProduct["totalPrice"] = item.price;
+	foundProduct["totalPrice"] = item.totalCost;
 	products.push(foundProduct);
   }
   return products;
