@@ -89,44 +89,45 @@ router.get("/add-to-cart/:id", indexController.addItemToCart);
 // });
 
 // GET: view shopping cart contents
-router.get("/shopping-cart", async (req, res) => {
-  try {
-	// find the cart, whether in session or in db based on the user state
-	let cart_user;
-	if (req.user) {
-	  cart_user = await Cart.findOne({ user: req.user._id });
-	}
-	// if user is signed in and has cart, load user's cart from the db
-	if (req.user && cart_user) {
-	  req.session.cart = cart_user;
-	  return res.render("shop/shopping-cart", {
-		cart: cart_user,
-		pageName: "Shopping Cart",
-		products: await productsFromCart(cart_user),
-	  });
-	}
-	// if there is no cart in session and user is not logged in, cart is empty
-	if (!req.session.cart) {
-	  return res.render("shop/shopping-cart", {
-		cart: null,
-		pageName: "Shopping Cart",
-		products: null,
-	  });
-	}
-	// otherwise, load the session's cart
-	return res.render("shop/shopping-cart", {
-	  cart: req.session.cart,
-	  pageName: "Shopping Cart",
-	  products: await productsFromCart(req.session.cart),
-	});
-  } catch (err) {
-	console.log(err.message);
-	res.redirect("/");
-  }
-});
+router.get("/shopping-cart", indexController.getShoppingCart);
+// router.get("/shopping-cart", async (req, res) => {
+//   try {
+// 	// find the cart, whether in session or in db based on the user state
+// 	let cart_user;
+// 	if (req.user) {
+// 	  cart_user = await Cart.findOne({ user: req.user._id });
+// 	}
+// 	// if user is signed in and has cart, load user's cart from the db
+// 	if (req.user && cart_user) {
+// 	  req.session.cart = cart_user;
+// 	  return res.render("shop/shopping-cart", {
+// 		cart: cart_user,
+// 		pageName: "Shopping Cart",
+// 		products: await productsFromCart(cart_user),
+// 	  });
+// 	}
+// 	// if there is no cart in session and user is not logged in, cart is empty
+// 	if (!req.session.cart) {
+// 	  return res.render("shop/shopping-cart", {
+// 		cart: null,
+// 		pageName: "Shopping Cart",
+// 		products: null,
+// 	  });
+// 	}
+// 	// otherwise, load the session's cart
+// 	return res.render("shop/shopping-cart", {
+// 	  cart: req.session.cart,
+// 	  pageName: "Shopping Cart",
+// 	  products: await productsFromCart(req.session.cart),
+// 	});
+//   } catch (err) {
+// 	console.log(err.message);
+// 	res.redirect("/");
+//   }
+// });
 
 // GET: reduce one from an item in the shopping cart
-router.get("/reduce/:id",indexController.reduceCartItem);
+router.get("/reduce/:id", indexController.reduceCartItem);
 // router.get("/reduce/:id", async function (req, res, next) {
 //   // if a user is logged in, reduce from the user's cart and save
 //   // else reduce from the session's cart
@@ -208,60 +209,62 @@ router.get("/removeAll/:id", indexController.removeAllItems);
 // });
 
 // GET: checkout form with csrf token
-router.get("/checkout", middleware.isLoggedIn, async (req, res) => {
-  const errorMsg = req.flash("error")[0];
+router.get("/checkout", middleware.isLoggedIn, indexController.getCheckoutPage);
+// router.get("/checkout", middleware.isLoggedIn, async (req, res) => {
+//   const errorMsg = req.flash("error")[0];
 
-  if (!req.session.cart) {
-	return res.redirect("/shopping-cart");
-  }
-  //load the cart with the session's cart's id from the db
-  cart = await Cart.findById(req.session.cart._id);
+//   if (!req.session.cart) {
+// 	return res.redirect("/shopping-cart");
+//   }
+//   //load the cart with the session's cart's id from the db
+//   cart = await Cart.findById(req.session.cart._id);
 
-  const errMsg = req.flash("error")[0];
-  res.render("shop/checkout", {
-	total: cart.totalCost,
-	csrfToken: req.csrfToken(),
-	errorMsg,
-	pageName: "Checkout",
-  });
-});
+//   const errMsg = req.flash("error")[0];
+//   res.render("shop/checkout", {
+// 	total: cart.totalCost,
+// 	csrfToken: req.csrfToken(),
+// 	errorMsg,
+// 	pageName: "Checkout",
+//   });
+// });
 
 // POST: handle checkout logic and payment using Stripe
-router.post("/checkout", middleware.isLoggedIn, async (req, res) => {
-  if (!req.session.cart) {
-	return res.redirect("/shopping-cart");
-  }
-  const cart = await Cart.findById(req.session.cart._id);
+router.post("/checkout", middleware.isLoggedIn, indexController.checkoutAndPay);
+// router.post("/checkout", middleware.isLoggedIn, async (req, res) => {
+//   if (!req.session.cart) {
+// 	return res.redirect("/shopping-cart");
+//   }
+//   const cart = await Cart.findById(req.session.cart._id);
 
-  for(let i=0;i<cart.items.length;i++) {
-	  var prodId = cart.items[i].productId;
-	  const product = await Product.findById(prodId);
-	  product.quantity -= cart.items[i].quantity;
-	  product.quantity = Math.max(0, product.quantity);
-	  await product.save();
-  }
+//   for(let i=0;i<cart.items.length;i++) {
+// 	  var prodId = cart.items[i].productId;
+// 	  const product = await Product.findById(prodId);
+// 	  product.quantity -= cart.items[i].quantity;
+// 	  product.quantity = Math.max(0, product.quantity);
+// 	  await product.save();
+//   }
 
-  const order = new Order({
-	user: req.user,
-	cart: {
-	  totalQuantity: cart.totalQuantity,
-	  totalCost: cart.totalCost,
-	  items: cart.items,
-	},
-	address: req.body.address,
-	paymentId: "123"
-  });
-  order.save(async (err, newOrder) => {
-	if (err) {
-	  console.log(err);
-	  return res.redirect("/checkout");
-	}
-	await cart.save();
-	await Cart.findByIdAndDelete(cart._id);
-	req.flash("success", "Successfully purchased");
-	req.session.cart = null;
-	res.redirect("/user/profile");
-  });
+//   const order = new Order({
+// 	user: req.user,
+// 	cart: {
+// 	  totalQuantity: cart.totalQuantity,
+// 	  totalCost: cart.totalCost,
+// 	  items: cart.items,
+// 	},
+// 	address: req.body.address,
+// 	paymentId: "123"
+//   });
+//   order.save(async (err, newOrder) => {
+// 	if (err) {
+// 	  console.log(err);
+// 	  return res.redirect("/checkout");
+// 	}
+// 	await cart.save();
+// 	await Cart.findByIdAndDelete(cart._id);
+// 	req.flash("success", "Successfully purchased");
+// 	req.session.cart = null;
+// 	res.redirect("/user/profile");
+//   });
   // stripe.charges.create(
   //   {
   //     amount: cart.totalCost * 100,
@@ -298,21 +301,6 @@ router.post("/checkout", middleware.isLoggedIn, async (req, res) => {
   //     });
   //   }
   // );
-});
-
-// create products array to store the info of each product in the cart
-async function productsFromCart(cart) {
-  let products = []; // array of objects
-  for (const item of cart.items) {
-	let foundProduct = (
-	  await Product.findById(item.productId).populate("category")
-	).toObject();
-	foundProduct["quantity"] = item.quantity;
-	foundProduct["totalPrice"] = item.totalCost;
-	products.push(foundProduct);
-  }
-  console.log(products);
-  return products;
-}
+// });
 
 module.exports = router;
