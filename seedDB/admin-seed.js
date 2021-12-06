@@ -6,16 +6,14 @@ connectDB();
 async function seedDB() {
     async function seedAdmin(email, password, username) {
         try {
-            const user = await User.findOne({ email: email });
-            if (user) {
-                return done(null, false, { message: "Email already exists" });
-            }
-            const newUser = await new User();
-            newUser.email = email;
+            const newUser = await new User({
+                email: email,
+                username: username
+            });
+            // newUser.email = email;
             newUser.password = newUser.hashPassword(password);
-            newUser.username = username;
+            // newUser.username = username;
             await newUser.save();
-            return done(null, newUser);
         } catch (error) {
             console.log(error);
             return error;
@@ -28,6 +26,8 @@ async function seedDB() {
     }
 
     await seedAdmin("admin@example.com", "Admin@123", "admin");
+
+    await closeDB();
 }
 
 seedDB();
