@@ -193,8 +193,6 @@ const router = AdminBroExpress.buildAuthenticatedRouter(adminBro, {
 	},
 	cookieName: "adminCookie",
 	cookiePassword: "adminCookiePassword"
-	// cookieName: process.env.ADMIN_COOKIE_NAME,
-	// cookiePassword: process.env.ADMIN_COOKIE_PASSWORD,
 });
 
 module.exports = router;

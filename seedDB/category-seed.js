@@ -6,24 +6,24 @@ const connectDB = require("./../config/db");
 connectDB();
 
 async function seedDB() {
-  async function seedCateg(titleStr) {
-    try {
-      const categ = await new Category({ title: titleStr });
-      await categ.save();
-    } catch (error) {
-      console.log(error);
-      return error;
-    }
-  }
+	async function seedCateg(titleStr) {
+		try {
+			const categ = await new Category({ title: titleStr });
+			await categ.save();
+		} catch (error) {
+			console.log(error);
+			return error;
+		}
+	}
 
-  async function closeDB() {
-    console.log("CLOSING CONNECTION");
-    await mongoose.disconnect();
-  }
-  await seedCateg("Men");
-  await seedCateg("Women");
-  
-  await closeDB();
+	async function closeDB() {
+		console.log("CLOSING CONNECTION");
+		await mongoose.disconnect();
+	}
+	await seedCateg("Men");
+	await seedCateg("Women");
+
+	await closeDB();
 }
 
 seedDB();

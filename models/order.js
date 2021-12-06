@@ -52,10 +52,6 @@ var Order = Schema({
 		type: Date,
 		required: true,
 		default: Date.now,
-	},
-	delivered: {
-		type: Boolean,
-		default: false,
 	}
 });
 

@@ -24,10 +24,6 @@ var Product = Schema({
 		type: mongoose.Schema.Types.ObjectId,
 		ref: "categories",
 	},
-    gender: {
-        type: String,
-        required: true
-    },
     brand: {
         type: String
     },

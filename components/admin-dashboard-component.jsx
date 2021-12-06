@@ -22,27 +22,27 @@ const Wrapper = styled.section`
 `;
 
 const imgStyle = {
-  width: "100%",
-  height: "30%",
+	width: "100%",
+	height: "30%",
 };
 
 const Dashboard = () => {
-  return (
-    <div>
-      <img
-        style={imgStyle}
-        src="images/banner-admin-page.jpg"
-        alt="dashboard-head"
-      />
-      <Wrapper>
-        <Title>Welcome to the Admin Panel</Title>
-        <Lead>
-          Here you can manage your products and categories as well as view users
-          and their orders.
-        </Lead>
-      </Wrapper>
-    </div>
-  );
+	return (
+		<div>
+			<img
+				style={imgStyle}
+				src="images/banner-admin-page.jpg"
+				alt="dashboard-head"
+			/>
+			<Wrapper>
+				<Title>Welcome to the Admin Panel</Title>
+				<Lead>
+					Here you can manage your products and categories as well as view users
+					and their orders.
+				</Lead>
+			</Wrapper>
+		</div>
+	);
 };
 
 export default Dashboard;

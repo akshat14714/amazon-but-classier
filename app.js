@@ -29,7 +29,6 @@ app.use("/admin", adminRouter);
 const indexRouter = require("./routes/index");
 const productsRouter = require("./routes/products");
 const usersRouter = require("./routes/user");
-const pagesRouter = require("./routes/pages");
 
 app.use(logger("dev"));
 app.use(express.json());
@@ -95,7 +94,6 @@ app.use(function (req, res, next) {
 app.use("/", indexRouter);
 app.use("/user", usersRouter);
 app.use("/products", productsRouter);
-app.use("/pages", pagesRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
