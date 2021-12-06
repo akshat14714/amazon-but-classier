@@ -44,10 +44,10 @@ var Order = Schema({
 		type: String,
 		required: true,
 	},
-	// paymentId: {
-	// 	type: String,
-	// 	required: true,
-	// },
+	paymentId: {
+		type: String,
+		required: true,
+	},
 	createdAt: {
 		type: Date,
 		required: true,

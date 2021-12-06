@@ -1,4 +1,4 @@
-require("dotenv").config();
+// require("dotenv").config();
 const createError = require("http-errors");
 const express = require("express");
 const path = require("path");
@@ -24,6 +24,8 @@ app.set("view engine", "ejs");
 
 // admin route
 const adminRouter = require("./routes/admin");
+app.use("/admin", adminRouter);
+
 const indexRouter = require("./routes/index");
 const productsRouter = require("./routes/products");
 const usersRouter = require("./routes/user");
@@ -59,8 +61,8 @@ app.use(async (req, res, next) => {
 		res.locals.login = req.isAuthenticated();
 		res.locals.session = req.session;
 		res.locals.currentUser = req.user;
+		// console.log("currentUser::: " + req.user);
 		const categories = await Category.find({}).sort({ title: 1 }).exec();
-		console.log(categories);
 		res.locals.categories = categories;
 		next();
 	} catch (error) {
@@ -94,7 +96,6 @@ app.use("/", indexRouter);
 app.use("/user", usersRouter);
 app.use("/products", productsRouter);
 app.use("/pages", pagesRouter);
-app.use("/admin", adminRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

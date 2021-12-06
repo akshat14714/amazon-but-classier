@@ -162,10 +162,6 @@ const adminBro = new AdminBro({
   },
 });
 
-// const ADMIN = {
-//   email: process.env.ADMIN_EMAIL,
-//   password: process.env.ADMIN_PASSWORD,
-// };
 const ADMIN = {
   email: "admin@example.com",
   password: "admin123"

@@ -226,6 +226,15 @@ router.post("/checkout", middleware.isLoggedIn, async (req, res) => {
 	return res.redirect("/shopping-cart");
   }
   const cart = await Cart.findById(req.session.cart._id);
+
+  for(let i=0;i<cart.items.length;i++) {
+	  var prodId = cart.items[i].productId;
+	  const product = await Product.findById(prodId);
+	  product.quantity -= cart.items[i].quantity;
+	  product.quantity = Math.max(0, product.quantity);
+	  await product.save();
+  }
+
   const order = new Order({
 	user: req.user,
 	cart: {
