@@ -6,13 +6,6 @@ var Payment = Schema({
         type: Schema.Types.ObjectId,
         ref: "users"
     },
-    order: {
-        type: Schema.Types.ObjectId,
-        ref: "orders"
-    },
-    address: {
-        type: String
-    },
     amount: {
         type: Number,
         required: true

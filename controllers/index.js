@@ -1,5 +1,5 @@
 const Product = require("../models/product");
-// const Category = require("../models/category");
+const Category = require("../models/category");
 const Cart = require("../models/cart");
 const Order = require("../models/order");
 const Payment = require('../models/payment');
@@ -7,7 +7,7 @@ const Payment = require('../models/payment');
 
 async function getHomePage(req, res, next) {
 	try {
-		const products = await Product.find({})
+		const products = await Product.find({ delete: false })
 			.sort("-createdAt")
 			.populate("category");
 		res.render("shop/home", { pageName: "Home", products });
@@ -213,6 +213,7 @@ async function checkoutAndPay(req, res, next) {
 	if (!req.session.cart) {
 		return res.redirect("/shopping-cart");
 	}
+
 	const cart = await Cart.findById(req.session.cart._id);
 
 	for (let i = 0; i < cart.items.length; i++) {
@@ -223,6 +224,13 @@ async function checkoutAndPay(req, res, next) {
 		await product.save();
 	}
 
+	const payment = new Payment({
+		user: req.user,
+		amount: cart.totalCost
+	});
+
+	await payment.save();
+
 	const order = new Order({
 		user: req.user,
 		cart: {
@@ -231,26 +239,16 @@ async function checkoutAndPay(req, res, next) {
 			items: cart.items,
 		},
 		address: req.body.address,
-		paymentId: "123"
+		paymentId: payment._id
 	});
-	await order.save();
 
-	const payment = new Payment({
-		user: req.user,
-		order: order._id,
-		address: req.body.address,
-		amount: cart.totalCost
-	});
-	await payment.save(async (err, newOrder) => {
-		if(err) {
+	order.save(async (err, newOrder) => {
+		if (err) {
 			console.log(err);
-			return res.redirect('/checkout');
+			return res.redirect("/checkout");
 		}
-		
 		await cart.save();
 		await Cart.findByIdAndDelete(cart._id);
-		await order.save();
-		
 		req.flash("success", "Successfully purchased");
 		req.session.cart = null;
 		res.redirect("/user/profile");
@@ -263,6 +261,7 @@ async function productsFromCart(cart) {
 		let foundProduct = (
 			await Product.findById(item.productId).populate("category")
 		).toObject();
+
 		foundProduct["quantity"] = item.quantity;
 		foundProduct["totalPrice"] = item.totalCost;
 		products.push(foundProduct);

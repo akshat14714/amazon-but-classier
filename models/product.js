@@ -44,6 +44,10 @@ var Product = Schema({
         type: Date,
         required: true,
         default: Date.now
+    },
+    delete: {
+        type: Boolean,
+        default: false
     }
 })
 

@@ -8,13 +8,13 @@ async function getAllProducts(req, res, next) {
 	const perPage = 8;
 	let page = parseInt(req.query.page) || 1;
 	try {
-		const products = await Product.find({})
+		const products = await Product.find({ delete: false })
 			.sort("-createdAt")
 			.skip(perPage * page - perPage)
 			.limit(perPage)
 			.populate("category");
 
-		const count = await Product.count();
+		const count = await Product.count({ delete: false });
 
 		res.render("shop/index", {
 			pageName: "All Products",
@@ -42,6 +42,7 @@ async function searchProduct(req, res, next) {
 	try {
 		const products = await Product.find({
 			title: { $regex: req.query.search, $options: "i" },
+			delete: false
 		})
 			.sort("-createdAt")
 			.skip(perPage * page - perPage)
@@ -50,6 +51,7 @@ async function searchProduct(req, res, next) {
 			.exec();
 		const count = await Product.count({
 			title: { $regex: req.query.search, $options: "i" },
+			delete: false
 		});
 		res.render("shop/index", {
 			pageName: "Search Results",
@@ -75,13 +77,13 @@ async function getProductsForCategory(req, res, next) {
 	let page = parseInt(req.query.page) || 1;
 	try {
 		const foundCategory = await Category.findOne({ slug: req.params.slug });
-		const allProducts = await Product.find({ category: foundCategory.id })
+		const allProducts = await Product.find({ category: foundCategory.id, delete: false })
 			.sort("-createdAt")
 			.skip(perPage * page - perPage)
 			.limit(perPage)
 			.populate("category");
 
-		const count = await Product.count({ category: foundCategory.id });
+		const count = await Product.count({ category: foundCategory.id, delete: false });
 
 		res.render("shop/index", {
 			pageName: foundCategory.title,

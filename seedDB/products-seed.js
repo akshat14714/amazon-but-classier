@@ -78,7 +78,8 @@ async function seedDB() {
           available: true,
           category: categ._id,
           gender: genderStr,
-          productCode: prodCode
+          productCode: prodCode,
+          delete: false
         });
         await prod.save();
       }
