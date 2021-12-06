@@ -2,7 +2,6 @@ const Order = require("../models/order");
 const Cart = require("../models/cart");
 
 function getSignupPage(req, res) {
-    console.log("Inside User Controller!");
     var errorMsg = req.flash("error")[0];
     res.render("user/signup", {
         csrfToken: req.csrfToken(),
@@ -23,7 +22,7 @@ async function postSignup(req, res) {
             req.session.oldUrl = null;
             res.redirect(oldUrl);
         } else {
-            res.redirect("/user/profile");
+            res.redirect("/");
         }
     } catch (err) {
         console.log(err);

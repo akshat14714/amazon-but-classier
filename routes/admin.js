@@ -181,7 +181,7 @@ const adminBro = new AdminBro({
 
 const ADMIN = {
 	email: "admin@example.com",
-	password: "admin123"
+	password: "Admin@123"
 }
 
 const router = AdminBroExpress.buildAuthenticatedRouter(adminBro, {

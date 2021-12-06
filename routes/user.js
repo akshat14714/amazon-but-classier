@@ -18,7 +18,7 @@ router.use(csrf());
 router.get("/signup", middleware.isNotLoggedIn, userController.getSignupPage);
 
 router.post("/signup", [middleware.isNotLoggedIn, userSignUpValidationRules(), validateSignup, passport.authenticate("local.signup", {
-	successRedirect: "/user/profile",
+	successRedirect: "/",
 	failureRedirect: "/user/signup",
 	failureFlash: true,
 })], userController.postSignup);
