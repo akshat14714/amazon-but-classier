@@ -8,21 +8,24 @@ const Order = require("../models/order");
 const middleware = require("../middleware/authenticated");
 const router = express.Router();
 
+const indexController = require('../controllers/index');
+
 const csrfProtection = csrf();
 router.use(csrfProtection);
 
 // GET: home page
-router.get("/", async (req, res) => {
-  try {
-	const products = await Product.find({})
-	  .sort("-createdAt")
-	  .populate("category");
-	res.render("shop/home", { pageName: "Home", products });
-  } catch (error) {
-	console.log(error);
-	res.redirect("/");
-  }
-});
+router.get("/", indexController.getHomePage);
+// router.get("/", async (req, res) => {
+//   try {
+// 	const products = await Product.find({})
+// 	  .sort("-createdAt")
+// 	  .populate("category");
+// 	res.render("shop/home", { pageName: "Home", products });
+//   } catch (error) {
+// 	console.log(error);
+// 	res.redirect("/");
+//   }
+// });
 
 // GET: add a product to the shopping cart when "Add to cart" button is pressed
 router.get("/add-to-cart/:id", async (req, res) => {
