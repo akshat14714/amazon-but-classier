@@ -71,8 +71,6 @@ const AdminShowOrder = (props) => {
 		}
 	});
 
-	// store the extracted data into variables to display them
-	// the id_key array is used to reference a certain product and take the admin to that product's page
 	let count = -1;
 	const CodesData = code_key.map((code) => {
 		count++;
